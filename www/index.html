@@ -117,6 +117,10 @@ function init(){
 	var w=0;
 	var h=0;
 
+    gotoSprings = function(){
+      window.location.assign("./springs.html")
+    }
+
 </script>
 
 	<script>
@@ -132,6 +136,8 @@ function init(){
 </head>
 <!-- <body onload="init();"> -->
 <body>
-	<canvas id="notBoxMod" width="1280" height="1280"></canvas>
+
+	<canvas id="notBoxMod" width="1280" height="1280" onClick=gotoSprings></canvas>
+
 </body>
 </html>

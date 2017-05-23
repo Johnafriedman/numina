@@ -28,7 +28,7 @@ IFL.Springs.GameState.prototype.preload = function () {
   // this.game.load.image('sky', 'assets/background.jpg');
   this.game.load.image('btn_back', 'assets/btn_back.png');
   // load filter
-  this.game.load.script('filter', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Plasma.js');
+  // this.game.load.script('filter', 'js/vendor/plasma.js');
 
 }
 
@@ -41,7 +41,7 @@ IFL.Springs.GameState.prototype.create = function() {
   this.background.width = 800;
   this.background.height = 600;
 
-  this.filter = this.game.add.filter('Plasma', 800, 600);
+  // this.filter = this.game.add.filter('Plasma', 800, 600);
 
   //  You have the following values to play with (defaults shown below):
 
@@ -50,7 +50,7 @@ IFL.Springs.GameState.prototype.create = function() {
   // filter.greenShift = 0.5;
   // filter.blueShift = 0.9;
 
-  this.background.filters = [this.filter];
+  // this.background.filters = [this.filter];
 
   this.game.add.button(0,0, 'btn_back', onUp, this);
   
@@ -103,9 +103,9 @@ IFL.Springs.GameState.prototype.create = function() {
   }
 
   // update filter
-  this.filter.update();
+  // this.filter.update();
 
   //  Uncomment for coolness :)
-  this.filter.blueShift -= 0.001;
+  // this.filter.blueShift -= 0.001;
 
 }
