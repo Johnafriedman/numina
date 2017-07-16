@@ -4,8 +4,8 @@
   "repository": "https://github.com/Johnafriedman/numina.git",
   "version": "1.0.0",
   "engines": {
-    "node": "4.2.2",
-    "npm": "2.14.7"
+    "node": "6.11.1",
+    "npm": "3.10.10"
   },
   "scripts": {},
   "dependencies": {
