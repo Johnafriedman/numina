@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VoicePOC</title>
+
+    <script>
+        window.onload = function () {
+
+            const targetSentence = 'once upon a time there was a robot';
+            let targetWords = targetSentence.split(' ');
+
+
+
+            let targetIndex = 0;
+            let grammar = '#JSGF V1.0; grammar words; public <word> = ' + targetWords.join(' | ') + ' ;'
+            let recognition = new webkitSpeechRecognition();
+            let speechRecognitionList = new webkitSpeechGrammarList();
+            speechRecognitionList.addFromString(grammar, 1);
+            recognition.grammars = speechRecognitionList;
+            recognition.continuous = true;
+            recognition.lang = 'en-US';
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 2;
+
+            let diagnostic = document.querySelector('.output');
+            let markup = targetWords.map(word => `<span style="">${word} </span>`).join('');
+            diagnostic.innerHTML = markup;
+            let bg = document.querySelector('html');
+
+            document.body.onclick = function () {
+                diagnostic.innerHTML = markup;
+                recognition.start();
+                targetIndex = 0;
+                console.log('Ready to receive a voice input.');
+            }
+
+            recognition.onspeechend = function() {
+                console.log("stop");
+                recognition.stop();
+            }
+
+            recognition.onend = function() {
+                console.log("stop");
+                recognition.stop();
+                if(targetIndex < targetWords.length){
+                    console.log("restarting");
+                    recognition.start();
+                }
+            }
+
+            recognition.onresult = function (event) {
+                let transcript = '',
+                    isFinal = false;
+
+                console.log(event);
+                let targetWord = targetWords[targetIndex];
+                console.log("target", targetWord);
+
+                for(let result=0;result<event.results.length;result++){
+                    for(let alternative=0;alternative<event.results[0].length;alternative++){
+                        if(!(event.results[result] && event.results[result][alternative])){
+                            break;
+                        }
+                        transcript = event.results[result][alternative].transcript;
+                        isFinal = event.results[result].isFinal;
+
+                        console.log("transcript", transcript);
+                        console.log("isFinal", isFinal);
+                        if(isFinal && transcript.includes(targetWord)){
+                            let transcriptWords = transcript.split(' ');
+                            let transcriptIndex = 0;
+
+                            console.log("transcriptWords", transcriptWords);
+
+                            while(!transcriptWords[transcriptIndex] && transcriptIndex < transcriptWords.length){
+                                transcriptIndex++;
+                            }
+                            while(targetIndex < targetWords.length && transcriptIndex < transcriptWords.length && targetWords[targetIndex] == transcriptWords[transcriptIndex]){
+                                if(transcriptWords[transcriptIndex]){
+                                    diagnostic.childNodes[targetIndex].style.color = 'red';
+                                    targetIndex++;
+                                }
+                                transcriptIndex++;
+                            }
+
+                            if(targetIndex < targetWords.length){
+                                // console.log("do it again");
+                                // recognition.abort();
+                            } else {
+                                console.log("done");
+                                recognition.abort();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    </script>
+
+</head>
+<body style="width:100%; height:800px">
+
+</body>
+<div class="output"></div>
+</html>
