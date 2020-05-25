@@ -7,13 +7,14 @@
     <script>
         window.onload = function () {
 
-            const targetSentence = 'once upon a time there was a robot';
-            let targetWords = targetSentence.split(' ');
+            const targetSentence = "once there was a tiny little robot";
+            let targetWords = targetSentence.toLowerCase().split(' ');
 
 
 
             let targetIndex = 0;
             let grammar = '#JSGF V1.0; grammar words; public <word> = ' + targetWords.join(' | ') + ' ;'
+            console.log(grammar);
             let recognition = new webkitSpeechRecognition();
             let speechRecognitionList = new webkitSpeechGrammarList();
             speechRecognitionList.addFromString(grammar, 1);
@@ -21,7 +22,7 @@
             recognition.continuous = true;
             recognition.lang = 'en-US';
             recognition.interimResults = true;
-            recognition.maxAlternatives = 2;
+            recognition.maxAlternatives = 1;
 
             let diagnostic = document.querySelector('.output');
             let status = document.querySelector('.status');
@@ -38,12 +39,12 @@
             }
 
             recognition.onspeechend = function() {
-                console.log("stop");
-                recognition.stop();
+                console.log("speechend");
+                // recognition.stop();
             }
 
             recognition.onend = function() {
-                console.log("stop");
+                console.log("end");
                 recognition.stop();
                 if(targetIndex < targetWords.length){
                     console.log("restarting");
@@ -59,8 +60,10 @@
                 let targetWord = targetWords[targetIndex];
                 console.log("target", targetWord);
 
-                for(let result=0;result<event.results.length;result++){
-                    for(let alternative=0;alternative<event.results[0].length;alternative++){
+                for(let result=event.resultIndex, wordFound = false;result<event.results.length && !wordFound ;result++){
+                    console.log(`result ${result}`)
+                    for(let alternative=0;alternative<event.results[0].length && !wordFound ;alternative++){
+                        console.log(`alt ${alternative}`)
                         if(!(event.results[result] && event.results[result][alternative])){
                             break;
                         }
@@ -68,8 +71,7 @@
                         isFinal = event.results[result].isFinal;
 
                         console.log("transcript", transcript);
-                        console.log("isFinal", isFinal);
-                        if(isFinal && transcript.includes(targetWord)){
+                        if(transcript.includes(targetWord)){
                             let transcriptWords = transcript.split(' ');
                             let transcriptIndex = 0;
 
@@ -77,19 +79,19 @@
 
                             while(!transcriptWords[transcriptIndex] && transcriptIndex < transcriptWords.length){
                                 transcriptIndex++;
+                                console.log('found empty string');
                             }
-                            while(targetIndex < targetWords.length && transcriptIndex < transcriptWords.length && targetWords[targetIndex] == transcriptWords[transcriptIndex]){
-                                if(transcriptWords[transcriptIndex]){
+                            while(!wordFound && targetIndex < targetWords.length && transcriptIndex < transcriptWords.length){
+                                console.log(`target ${targetIndex} trans ${transcriptIndex}`)
+                                if(transcriptWords[transcriptIndex] == targetWords[targetIndex]){
                                     diagnostic.childNodes[targetIndex].style.color = 'red';
                                     targetIndex++;
+                                    wordFound=true;
                                 }
                                 transcriptIndex++;
                             }
 
-                            if(targetIndex < targetWords.length){
-                                // console.log("do it again");
-                                // recognition.abort();
-                            } else {
+                            if(targetIndex >= targetWords.length){
                                 console.log("done");
                                 status.textContent = "Click anywhere to begin.";
                                 recognition.abort();
