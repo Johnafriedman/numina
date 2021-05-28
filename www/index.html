@@ -47,27 +47,30 @@ notBox = {
 };
   
 window.onload = window.onresize = function() {
-	init();
-	canvas.width = Math.min(getWidth(), notBox.MAX_WIDTH);
-	canvas.height = Math.min(getHeight(), notBox.MAX_HEIGHT);
 
-	cx = Math.floor(canvas.width/2);
-	cy = Math.floor(canvas.height/2);
-	max_width  =cx-1;
-	max_height  =cy-1;
+	window.location.assign("./springs.html")
 
-	ctx = canvas.getContext('2d');
-
-	ctx.globalCompositeOperation = 'copy';
-	ctx.fillStyle = "rgb(255,255,255)";
-	ctx.clearRect(0,0,1280,1280);
-
-	ctx.globalCompositeOperation = 'xor';
-	ctx.fillStyle = "rgb(0,0,0)";
+	// init();
+	// canvas.width = Math.min(getWidth(), notBox.MAX_WIDTH);
+	// canvas.height = Math.min(getHeight(), notBox.MAX_HEIGHT);
+	//
+	// cx = Math.floor(canvas.width/2);
+	// cy = Math.floor(canvas.height/2);
+	// max_width  =cx-1;
+	// max_height  =cy-1;
+	//
+	// ctx = canvas.getContext('2d');
+	//
+	// ctx.globalCompositeOperation = 'copy';
+	// ctx.fillStyle = "rgb(255,255,255)";
+	// ctx.clearRect(0,0,1280,1280);
+	//
+	// ctx.globalCompositeOperation = 'xor';
+	// ctx.fillStyle = "rgb(0,0,0)";
 
 }
 window.onclick = function(){
-	window.location.assign("./springs.html")
+	// window.location.assign("./springs.html")
 }
 
 var busy = false;
