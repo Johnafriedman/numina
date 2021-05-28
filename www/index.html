@@ -45,11 +45,11 @@ notBox = {
   MAX_WIDTH: 1024,
   MAX_HEIGHT: 800
 };
-  
+
+var busy = false;
+
 window.onload = window.onresize = function() {
-	console.log("before init");
 	init();
-	console.log("after init");
 	canvas.width = Math.min(getWidth(), notBox.MAX_WIDTH);
 	canvas.height = Math.min(getHeight(), notBox.MAX_HEIGHT);
 
@@ -66,14 +66,12 @@ window.onload = window.onresize = function() {
 
 	ctx.globalCompositeOperation = 'xor';
 	ctx.fillStyle = "rgb(0,0,0)";
-	console.log("after onload");
 
 }
 window.onclick = function(){
 	window.location.assign("./springs.html")
 }
 
-var busy = true;
 function draw (){
 	if(busy==false){
 		busy=true;
@@ -105,6 +103,7 @@ function init(){
 		ctx.fillStyle = "rgb(1,1,1)";
 		notInterval = setInterval("draw();", 10);
 	}
+	busy=false;
 }
 
 </script>
